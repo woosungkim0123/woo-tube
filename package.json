@@ -1,0 +1,28 @@
+{
+  "name": "wootube",
+  "version": "1.0.0",
+  "description": "The best way to watch video",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/woosungkim0123/nodejsProject.git"
+  },
+  "scripts": {
+    "dev": "nodemon --exec babel-node src/server.js"
+  },
+  "author": "woosung",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/woosungkim0123/nodejsProject/issues"
+  },
+  "homepage": "https://github.com/woosungkim0123/nodejsProject#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.8",
+    "@babel/node": "^7.16.8",
+    "@babel/preset-env": "^7.16.11",
+    "nodemon": "^2.0.15"
+  }
+}
