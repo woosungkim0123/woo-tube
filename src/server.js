@@ -1,4 +1,3 @@
-import "./db";
 // 파일자체를 import함 함수를 import하는게 아님
 // 서버는 이라인을 보는순간 mongo에연결됨
 // db는 모든게 다 실행되고 나서 시작됨
@@ -34,7 +33,4 @@ app.use("/", globalRouter);
 app.use("/users", userRouter);
 app.use("/videos", videoRouter);
 
-const PORT = 4000;
-app.listen(PORT, () =>
-  console.log(`✅ Server listening on port http://localhost:${PORT}`)
-);
+export default app;

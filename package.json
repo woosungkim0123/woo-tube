@@ -7,7 +7,7 @@
     "url": "git+https://github.com/woosungkim0123/nodejsProject.git"
   },
   "scripts": {
-    "dev": "nodemon --exec babel-node src/server.js"
+    "dev": "nodemon --exec babel-node src/init.js"
   },
   "author": "woosung",
   "license": "MIT",
