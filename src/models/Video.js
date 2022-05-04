@@ -4,13 +4,13 @@ import mongoose from "mongoose";
 // 모델의 형태를 정의해줄 필요가있음(schema(스키마))
 const videoSchema = new mongoose.Schema({
   // 같은의미임 title이랑 description
-  title: { type: String },
-  description: String,
-  createdAt: Date,
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  createdAt: { type: Date, required: true, default: Date.now() },
   hashtags: [{ type: String }],
   meta: {
-    views: Number,
-    rating: Number,
+    views: { type: Number, required: true, default: 0 },
+    rating: { type: Number, required: true, default: 0 },
   },
 });
 
