@@ -7,7 +7,8 @@
     "url": "git+https://github.com/woosungkim0123/nodejsProject.git"
   },
   "scripts": {
-    "dev": "nodemon --exec babel-node src/init.js"
+    "dev": "nodemon --exec babel-node src/init.js",
+    "assets": "webpack --config webpack.config.js"
   },
   "author": "woosung",
   "license": "MIT",
@@ -19,13 +20,20 @@
     "express": "^4.17.3",
     "mongoose": "^6.3.1",
     "morgan": "^1.10.0",
-    "pug": "^3.0.2",
-    "python-shell": "^3.0.1"
+    "pug": "^3.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.17.8",
     "@babel/node": "^7.16.8",
     "@babel/preset-env": "^7.16.11",
-    "nodemon": "^2.0.15"
+    "babel-loader": "^8.2.5",
+    "css-loader": "^6.7.1",
+    "mini-css-extract-plugin": "^2.6.0",
+    "nodemon": "^2.0.15",
+    "sass": "^1.51.0",
+    "sass-loader": "^12.6.0",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2"
   }
 }
