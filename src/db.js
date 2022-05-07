@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-mongoose.connect("mongodb://127.0.0.1:27017/wetbue");
+mongoose.connect("mongodb://127.0.0.1:27017/wootube");
 
 const db = mongoose.connection;
 // on은 여러번실행
