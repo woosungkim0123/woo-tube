@@ -53,3 +53,27 @@ app.use("/users", userRouter);
 app.use("/videos", videoRouter);
 
 export default app;
+
+/*
+const {
+  session: {
+    user: {id},
+  },
+  body{name}
+}
+
+
+세션 업데이트 시켜줄려면?
+db도 업데이트하고 이것도 업데이트
+
+직접하는것 req.session.user ={
+  ...req.session.user,
+  //업데이트해줌밑에꺼
+  name,
+  email,
+
+}
+
+
+
+*/
