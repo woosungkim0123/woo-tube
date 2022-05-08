@@ -1,10 +1,14 @@
 "use strict";
 
+require("dotenv/config");
+
 require("regenerator-runtime");
 
 require("./db");
 
 require("./models/Video");
+
+require("./models/User");
 
 var _server = _interopRequireDefault(require("./server"));
 
