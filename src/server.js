@@ -3,7 +3,7 @@
 // db는 모든게 다 실행되고 나서 시작됨
 import express from "express";
 import morgan from "morgan";
-import globalRouter from "./routers/globalRouter";
+import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
 /*
@@ -30,7 +30,7 @@ app.use(logger);
 // extended는 body에 있는 정보들을 보기 좋게 갖추어줌
 app.use(express.urlencoded({ extended: true }));
 app.use("/static", express.static("assets"));
-app.use("/", globalRouter);
+app.use("/", rootRouter);
 app.use("/users", userRouter);
 app.use("/videos", videoRouter);
 
