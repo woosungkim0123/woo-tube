@@ -3,9 +3,12 @@
 // db는 모든게 다 실행되고 나서 시작됨
 import express from "express";
 import morgan from "morgan";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
+import { localsMiddleware } from "./middlewares";
 /*
 const curr = new Date();
 
@@ -29,6 +32,21 @@ app.use(logger);
 // form의 body를 이해함
 // extended는 body에 있는 정보들을 보기 좋게 갖추어줌
 app.use(express.urlencoded({ extended: true }));
+
+app.use(
+  session({
+    secret: process.env.COOKIE_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 2000000,
+    },
+    store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
+  })
+);
+// 이제 이 미들웨어가 사이트로 들어오는 모두를 기억하게됨
+
+app.use(localsMiddleware);
 app.use("/static", express.static("assets"));
 app.use("/", rootRouter);
 app.use("/users", userRouter);
