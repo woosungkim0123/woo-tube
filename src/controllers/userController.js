@@ -49,7 +49,7 @@ export const getLogin = (req, res) =>
 export const postLogin = async (req, res) => {
   const pageTitle = "Login";
   const { username, password } = req.body;
-  const user = await User.findOne({ username });
+  const user = await User.findOne({ username, socialOnly: false });
   if (!user)
     return res
       .status(400)
@@ -117,12 +117,27 @@ export const finishGithubLogin = async (req, res) => {
         },
       })
     ).json();
-    const email = emialData.find(
+    const emailObj = emialData.find(
       (email) => email.primary === true && email.verified === true
     );
-    if (!email) {
+    if (!emailObj) {
       return res.redirect("/login");
     }
+    let user = await User.findOne({ email: emailObj.email });
+    if (!user) {
+      user = await User.create({
+        name: userData.name,
+        avatarUrl: userData.avatar_url,
+        username: userData.login,
+        email: emailObj.email,
+        password: "",
+        socialOnly: true,
+        location: userData.location,
+      });
+    }
+    req.session.loggedIn = true;
+    req.session.user = user;
+    return res.redirect("/");
   } else {
     return res.redirect("/login");
   }
