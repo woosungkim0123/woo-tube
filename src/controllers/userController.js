@@ -148,10 +148,12 @@ export const getEdit = (req, res) => {
 export const postEdit = async (req, res) => {
   const {
     session: {
-      user: { _id, email: sessionEmail, username: sessionUsername },
+      user: { _id, avatarUrl, email: sessionEmail, username: sessionUsername },
     },
     body: { name, email, username, location },
+    file,
   } = req;
+
   // return 값으로 업데이트된 data를 넘겨줌
   let searchParam = [];
   if (sessionEmail !== email) {
@@ -172,7 +174,13 @@ export const postEdit = async (req, res) => {
   }
   const updatedUser = await User.findByIdAndUpdate(
     _id,
-    { name, email, username, location },
+    {
+      avatarUrl: file ? file.path : avatarUrl,
+      name,
+      email,
+      username,
+      location,
+    },
     { new: true }
   );
   req.session.user = updatedUser;
@@ -189,6 +197,7 @@ export const postChangePassword = async (req, res) => {
     },
     body: { oldPassword, newPassword, newPasswordConfirmation },
   } = req;
+
   const ok = await bcrypt.compare(oldPassword, password);
   if (!ok)
     return res.render("users/change-password", {

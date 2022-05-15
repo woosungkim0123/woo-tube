@@ -47,6 +47,7 @@ app.use(
 // 이제 이 미들웨어가 사이트로 들어오는 모두를 기억하게됨
 
 app.use(localsMiddleware);
+app.use("/uploads", express.static("uploads"));
 app.use("/static", express.static("assets"));
 app.use("/", rootRouter);
 app.use("/users", userRouter);
@@ -77,4 +78,6 @@ db도 업데이트하고 이것도 업데이트
 
 
 */
-// postman 사용
+// 서버에 이미지를 저장하는 방식은 좋지않다
+// 다른 곳에 저장
+// 서버가 사라졌다 다시 돌아와도 파일은 그대로 있도록
