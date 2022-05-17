@@ -4,9 +4,10 @@ const path = require("path");
 module.exports = {
   entry: {
     main: "./src/client/js/main.js",
-    hi: "./src/client/js/hi.js",
+    videoPlayer: "./src/client/js/videoPlayer.js",
   },
-
+  mode: "development",
+  watch: true,
   plugins: [
     new MiniCssExtractPlugin({
       filename: "css/styles.css",
@@ -21,7 +22,6 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
         use: {
           loader: "babel-loader",
           options: {
@@ -30,7 +30,7 @@ module.exports = {
         },
       },
       {
-        test: /\.scss/,
+        test: /\.scss$/,
         use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
     ],
