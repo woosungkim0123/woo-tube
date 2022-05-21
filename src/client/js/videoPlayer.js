@@ -1,11 +1,14 @@
 const video = document.querySelector("video");
 const playBtn = document.getElementById("play");
+const playBtnIcon = playBtn.querySelector("i");
 const muteBtn = document.getElementById("mute");
+const muteBtnIcon = muteBtn.querySelector("i");
 const volumeRange = document.getElementById("volume");
 const currenTime = document.getElementById("currenTime");
 const totalTime = document.getElementById("totalTime");
 const timeline = document.getElementById("timeline");
 const fullScreenBtn = document.getElementById("fullScreen");
+const fullScreenIcon = fullScreenBtn.querySelector("i");
 const videoContainer = document.getElementById("videoContainer");
 const videoControls = document.getElementById("videoControls");
 
@@ -20,7 +23,7 @@ const handleplayClick = (e) => {
   } else {
     video.pause();
   }
-  playBtn.innerText = video.paused ? "Play" : "Pause";
+  playBtnIcon.classList = video.paused ? "fas fa-play" : "fas fa-pause";
 };
 
 const handleMuteClick = (e) => {
@@ -30,7 +33,9 @@ const handleMuteClick = (e) => {
     video.muted = true;
   }
 
-  muteBtn.innerText = video.muted ? "Unmute" : "Mute";
+  muteBtnIcon.classList = video.muted
+    ? "fas fa-volume-mute"
+    : "fas fa-volume-up";
   volumeRange.value = video.muted ? 0 : volumeValue;
 };
 
@@ -46,8 +51,8 @@ const handleVolume = (event) => {
   video.volume = value;
 };
 
-const formatTime = (second) =>
-  new Date(second * 1000).toISOString().substring(11, 19);
+const formatTime = (seconds) =>
+  new Date(seconds * 1000).toISOString().substr(14, 5);
 
 const handleLoadedMetadata = () => {
   totalTime.innerText = formatTime(Math.floor(video.duration));
@@ -111,10 +116,10 @@ const handleFullScreen = () => {
   const fullscreen = document.fullscreenElement;
   if (fullscreen) {
     document.exitFullscreen();
-    fullScreenBtn.innerText = "Enter Fullscreen";
+    fullScreenIcon.classList = "fas fa-expand";
   } else {
     videoContainer.requestFullscreen();
-    fullScreenBtn.innerText = "Exit Fullscreen";
+    fullScreenIcon.classList = "fas fa-compress";
   }
 };
 document.onfullscreenchange = () => {
@@ -143,16 +148,50 @@ const handleMouseLeave = () => {
   controlsTimeout = setTimeout(hideControls, 3000);
 };
 
+const handleSpaceBar = (event) => {
+  if (event.key === " ") {
+    handleplayClick();
+  }
+};
+const handleEnded = () => {
+  const { id } = videoContainer.dataset;
+
+  fetch(`/api/videos/${id}/view`, {
+    method: "POST",
+  });
+};
+
+console.log(videoContainer.dataset);
+
 playBtn.addEventListener("click", handleplayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolume);
-video.addEventListener("loadedmetadata", handleLoadedMetadata);
+video.addEventListener("loadeddata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
+videoContainer.addEventListener("mousemove", handleMouseMove);
+videoContainer.addEventListener("mouseleave", handleMouseLeave);
 timeline.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleFullScreen);
-video.addEventListener("mousemove", handleMouseMove);
-video.addEventListener("mouseleave", handleMouseLeave);
+document.addEventListener("keydown", handleSpaceBar);
+
+video.addEventListener("ended", handleEnded);
 
 if (video.readyState == 4) {
   handleLoadedMetadata();
 }
+/*
+Eventlistener "keydown" 을 통해 단축키 만들수 있어요! (space = play, m || M = mute, f||F = full screen) 이렇게 하니 진짜 유튜브 같네요 ㅎㅎㅎ
+*/
+
+/*
+요즘은 서버에서 템플릿을 렌더링하지않음
+
+템플릿을 렌더링하는 views와 api views의 차이를 알아보자
+
+api는 프론트와 백엔드가 서버를 통해 통신하는 방법
+
+api는 백엔드가 템플릿을 렌더링하지않을때 프론트와 백엔드가 통신하는 방법
+
+
+
+*/
