@@ -12,6 +12,8 @@ export const protectorMiddleware = (req, res, next) => {
   if (req.session.loggedIn) {
     next();
   } else {
+    req.flash("error", "Not authorized");
+    // flash 미들웨어를 설치하면 message locals를 만들어줌
     return res.redirect("/login");
   }
 };
@@ -20,6 +22,7 @@ export const publicOnlyMiddleware = (req, res, next) => {
   if (!req.session.loggedIn) {
     next();
   } else {
+    req.flash("error", "Not authorized");
     return res.redirect("/");
   }
 };

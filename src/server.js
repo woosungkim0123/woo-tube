@@ -5,11 +5,13 @@ import express from "express";
 import morgan from "morgan";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import flash from "express-flash";
 import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
 import { localsMiddleware } from "./middlewares";
 import apiRouter from "./routers/apiRouter";
+
 /*
 const curr = new Date();
 
@@ -46,7 +48,8 @@ app.use(
   })
 );
 // 이제 이 미들웨어가 사이트로 들어오는 모두를 기억하게됨
-
+// locals속성은 템플릿에서 사용할 수 있느 ㄴ것
+app.use(flash());
 app.use(localsMiddleware);
 app.use("/uploads", express.static("uploads"));
 app.use("/static", express.static("assets"));

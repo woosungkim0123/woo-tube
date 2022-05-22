@@ -69,6 +69,7 @@ export const logout = (req, res) => {
   req.session.destroy(function (err) {
     console.log("로그아웃");
   });
+  req.flash("info", "바이 바이");
   return res.redirect("/");
 };
 export const startGithubLogin = (req, res) => {
@@ -186,10 +187,14 @@ export const postEdit = async (req, res) => {
   req.session.user = updatedUser;
   return res.redirect("/users/edit");
 };
-export const getChangePassword = (req, res) =>
-  res
-    .status(400)
-    .render("users/change-password", { pageTitle: "Change Password" });
+export const getChangePassword = (req, res) => {
+  if (req.session.user.socialOnly === true) {
+    req.flash("error", "you login social only");
+    return res.redirect("/");
+  }
+  return res.render("users/change-password", { pageTitle: "Change Password" });
+};
+
 export const postChangePassword = async (req, res) => {
   const {
     session: {
@@ -218,6 +223,7 @@ export const postChangePassword = async (req, res) => {
   const user = await User.findById(_id);
   user.password = newPassword;
   await user.save();
+
   req.session.user.password = user.password;
   // 이후 로그아웃 시키고 로그인 페이지로 이동시키고 싶으면
   req.session.destroy();

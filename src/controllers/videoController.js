@@ -52,7 +52,10 @@ export const postEdit = async (req, res) => {
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video Not Found" });
   }
-  if (String(video.owner) !== String(_id)) return res.status(403).redirect("/");
+  if (String(video.owner) !== String(_id)) {
+    req.flash("error", "Not authorized");
+    return res.status(403).redirect("/");
+  }
   await Video.findByIdAndUpdate(id, {
     title,
     description,
