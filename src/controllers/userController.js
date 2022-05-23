@@ -111,14 +111,14 @@ export const finishGithubLogin = async (req, res) => {
         },
       })
     ).json();
-    const emialData = await (
+    const emailData = await (
       await fetch(`${apiUrl}/user/emails`, {
         headers: {
           Authorization: `token ${access_token}`,
         },
       })
     ).json();
-    const emailObj = emialData.find(
+    const emailObj = emailData.find(
       (email) => email.primary === true && email.verified === true
     );
     if (!emailObj) {

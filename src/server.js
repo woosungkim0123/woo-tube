@@ -47,6 +47,13 @@ app.use(
     store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
   })
 );
+
+app.use((req, res, next) => {
+  res.header("Cross-Origin-Embedder-Policy", "require-corp");
+  res.header("Cross-Origin-Opener-Policy", "same-origin");
+  next();
+});
+
 // 이제 이 미들웨어가 사이트로 들어오는 모두를 기억하게됨
 // locals속성은 템플릿에서 사용할 수 있느 ㄴ것
 app.use(flash());
