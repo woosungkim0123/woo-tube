@@ -1,13 +1,28 @@
 import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 
-const startBtn = document.getElementById("startBtn");
+const actionBtn = document.getElementById("actionBtn");
 const video = document.getElementById("preview");
 
 let stream;
 let recorder;
 let recordingVideo;
 
+const files = {
+  input: "recording.webm",
+  output: "output.mp4",
+  thumb: "thumbnail.jpg",
+};
+const downloadFile = (fileUrl, fileName) => {
+  const a = document.createElement("a");
+  a.href = fileUrl;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+};
 const handleDownload = async () => {
+  actionBtn.removeEventListener("click", handleDownload);
+  actionBtn.innerText = "전송중...";
+  actionBtn.disable = true;
   // ffmpeg 인스턴스 만들어주기(콘솔에서 보기위해 true)
   const ffmpeg = createFFmpeg({
     corePath: "https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js",
@@ -23,12 +38,12 @@ const handleDownload = async () => {
   // ffmpeg에 파일 만들기
   // ffmpeg의 가상의 세계에 파일을 생성해줌
   // 3번째 인자에는 binaryData를 줘야함(0과 1의 정보)
-  ffmpeg.FS("writeFile", "recording.webm", await fetchFile(recordingVideo));
+  ffmpeg.FS("writeFile", files.input, await fetchFile(recordingVideo));
 
   // 파일을 만들었지만 아무것도 하는 것이 없음 명령해야함
   // 콘솔에 쓰듯이 input, 파일명, (초당 60프레임으로 인코딩 [더 빠른 영상 인코딩 가능하게 해줌]),output
   // 가상 컴퓨터에 존재하는 파일을 input으로 받는것, output으로 mp4를 적으면 mp4로 변환
-  await ffmpeg.run("-i", "recording.webm", "-r", "60", "output.mp4");
+  await ffmpeg.run("-i", files.input, "-r", "60", files.output);
 
   // 썸네일 만들기
   // -ss는 특정 시간대로 갈 수 있게 해줌
@@ -36,16 +51,16 @@ const handleDownload = async () => {
   // 이 파일은 FS의 메모리에 만들어지게됨
   await ffmpeg.run(
     "-i",
-    "recording.webm",
+    files.input,
     "-ss",
     "00:00:01",
     "-frames:v",
     "1",
-    "thumbnail.jpg"
+    files.thumb
   );
 
   // 메모리에있는 파일 가져오기
-  const mp4File = ffmpeg.FS("readFile", "output.mp4");
+  const mp4File = ffmpeg.FS("readFile", files.output);
 
   // 파일은 Uint8Array(array of 8-bit unsigned integers) 타입
   // unsigned integers은 양의정수
@@ -63,7 +78,7 @@ const handleDownload = async () => {
 
   // 썸네일
 
-  const thumbFile = ffmpeg.FS("readFile", "thumbnail.jpg");
+  const thumbFile = ffmpeg.FS("readFile", files.thumb);
 
   // blob은 배열 안에 배열을 받을 수 있음
   // 그리고 js한테 video/mp4라고 알려줘야함
@@ -72,31 +87,40 @@ const handleDownload = async () => {
   const mp4Url = URL.createObjectURL(mp4Blob);
   const thumbUrl = URL.createObjectURL(thumbBlob);
 
-  const a = document.createElement("a");
-  a.href = mp4Url;
-  a.download = "MyRecording.mp4";
-  document.body.appendChild(a);
-  a.click();
+  downloadFile(mp4Url, "MyRecording.mp4");
+  downloadFile(thumbUrl, "MyThumbnail.jpg");
 
-  const thumbA = document.createElement("a");
-  thumbA.href = thumbUrl;
-  thumbA.download = "MyThumbnail.jpg";
-  document.body.appendChild(thumbA);
-  thumbA.click();
+  // 소스 파일도 지워줌
+  ffmpeg.FS("unlink", files.input);
+  // 브라우저가 느려질테니 unlink해주기`
+  ffmpeg.FS("unlink", files.output);
+  ffmpeg.FS("unlink", files.thumb);
+  // url도 삭제
+
+  URL.revokeObjectURL(thumbUrl);
+  URL.revokeObjectURL(mp4Url);
+  URL.revokeObjectURL(recordingVideo);
+
+  actionBtn.disable = false;
+  actionBtn.innerText = "Recorder...";
+  actionBtn.addEventListener("click", handleDownload);
 };
 
+/*
 const handleRecordStop = () => {
-  startBtn.innerText = "Download Recording";
-  startBtn.removeEventListener("click", handleRecordStop);
-  startBtn.addEventListener("click", handleDownload);
+  actionBtn.innerText = "Download Recording";
+  actionBtn.removeEventListener("click", handleRecordStop);
+  actionBtn.addEventListener("click", handleDownload);
 
   recorder.stop();
 };
-
+*/
 const handleRecordStart = () => {
-  startBtn.innerText = "Stop Recording";
-  startBtn.removeEventListener("click", handleRecordStart);
-  startBtn.addEventListener("click", handleRecordStop);
+  //actionBtn.innerText = "Stop Recording";
+  actionBtn.innerText = "Recording";
+  actionBtn.disabled = true;
+  actionBtn.removeEventListener("click", handleRecordStart);
+  //actionBtn.addEventListener("click", handleRecordStop);
 
   recorder = new window.MediaRecorder(stream, { mimeType: "video/webm" });
   recorder.ondataavailable = (event) => {
@@ -109,24 +133,30 @@ const handleRecordStart = () => {
     video.src = recordingVideo;
     video.loop = true;
     video.play();
+    actionBtn.innerText = "Download";
+    actionBtn.disabled = false;
+    actionBtn.addEventListener("click", handleDownload);
   };
   recorder.start();
   setTimeout(() => {
     recorder.stop();
-  }, 10000);
+  }, 5000);
 };
 
 const init = async () => {
   stream = await navigator.mediaDevices.getUserMedia({
     audio: false,
-    video: true,
+    video: {
+      width: 1024,
+      height: 576,
+    },
   });
   video.srcObject = stream;
   video.play();
 };
 init();
 
-startBtn.addEventListener("click", handleRecordStart);
+actionBtn.addEventListener("click", handleRecordStart);
 
 /*
 ffmpeg 로 mp4 만들기

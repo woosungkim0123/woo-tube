@@ -11,6 +11,7 @@ export const formatHashtags = (hastags) =>
 const videoSchema = new mongoose.Schema({
   title: { type: String, required: true, trim: true, maxLegnth: 80 },
   fileUrl: { type: String, required: true },
+  thumbUrl: { type: String, required: true },
   description: { type: String, required: true, trim: true, minLength: 20 },
   createdAt: { type: Date, required: true, default: Date.now() },
   hashtags: [{ type: String, trim: true }],
@@ -35,7 +36,9 @@ videoSchema.static("formatHashtags", (hashtags) => {
     .split(",")
     .map((word) => (word.startsWith("#") ? word : `#${word}`));
 });
-
+videoSchema.static("changePathFormula", (urlPath) => {
+  return urlPath.replace(/\\/g, "/");
+});
 const Video = mongoose.model("Video", videoSchema);
 
 export default Video;
