@@ -22,6 +22,7 @@ export const search = async (req, res) => {
     videos = await Video.find({
       title: {
         // i는 대소문자 구분없음
+
         $regex: new RegExp(keyword, "i"),
       },
     });
