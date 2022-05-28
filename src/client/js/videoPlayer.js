@@ -161,8 +161,6 @@ const handleEnded = () => {
   });
 };
 
-console.log(videoContainer.dataset);
-
 playBtn.addEventListener("click", handleplayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolume);
