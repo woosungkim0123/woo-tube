@@ -17,7 +17,7 @@ let controlsMovementTimeout = null;
 let volumeValue = 0.5;
 video.volume = volumeValue;
 
-const handleplayClick = (e) => {
+const handleplayClick = () => {
   if (video.paused) {
     video.play();
   } else {
@@ -173,10 +173,11 @@ fullScreenBtn.addEventListener("click", handleFullScreen);
 document.addEventListener("keydown", handleSpaceBar);
 
 video.addEventListener("ended", handleEnded);
-
+// video.readyState가 4라는 뜻은 video가 충분히 불러와져서 사용이 가능하다는 뜻
 if (video.readyState == 4) {
   handleLoadedMetadata();
 }
+
 /*
 Eventlistener "keydown" 을 통해 단축키 만들수 있어요! (space = play, m || M = mute, f||F = full screen) 이렇게 하니 진짜 유튜브 같네요 ㅎㅎㅎ
 */

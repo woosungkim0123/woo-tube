@@ -1,4 +1,3 @@
-import fetch from "node-fetch";
 const form = document.getElementById("commentForm");
 const deleteBtn = document.querySelectorAll(".deleteBtn");
 const videoContainer = document.getElementById("videoContainer");
