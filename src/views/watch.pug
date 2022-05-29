@@ -20,15 +20,21 @@ block content
                 span#fullScreen
                     i.fas.fa-expand
     if loggedIn
-        div.video__comments
+        div.video__add-comments
             form.video__comment-form#commentForm
                 textarea(cols="30", rows="10", placeholder="좋댓구 부탁")
                 button 전송
+
     div.video__comments 
         ul
             each comment in video.comments.reverse()
-                li.video__comment=comment.text
+                li.video__comment(data-id=comment._id)
+                    i.fas.fa-comment 
+                    span  #{comment.text}
+                    if loggedIn && (loggedInUser._id === String(comment.owner))
+                        span.deleteBtn ❌
 
     block scripts 
         script(src="/static/js/videoPlayer.js")
-        script(src="/static/js/commentSection.js")
+        if loggedIn
+            script(src="/static/js/commentSection.js")  

@@ -66,10 +66,7 @@ export const postLogin = async (req, res) => {
   return res.redirect("/");
 };
 export const logout = (req, res) => {
-  req.session.destroy(function (err) {
-    console.log("로그아웃");
-  });
-  req.flash("info", "바이 바이");
+  req.session.destroy();
   return res.redirect("/");
 };
 export const startGithubLogin = (req, res) => {

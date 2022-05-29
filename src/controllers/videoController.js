@@ -139,12 +139,30 @@ export const createComment = async (req, res) => {
   });
   video.comments.push(comment._id);
   video.save();
-  const foundUser = await User.findById({ _id: user._id }).populate("comments");
-  if (!foundUser) {
-    return res.sendStatus(404);
-  }
+  const foundUser = await User.findById({ _id: user._id });
   foundUser.comments.push(comment._id);
   foundUser.save();
+  req.session.user = foundUser;
+  return res.status(201).json({ newCommentId: comment._id });
+};
+export const deleteComment = async (req, res) => {
+  const {
+    params: { id },
+    body: { videoId },
+    session: { user },
+  } = req;
+  const video = await Video.findById(videoId);
+  const commentUser = await User.findById(user._id);
+  if (user.comments.indexOf(id) < 0) {
+    req.flash("info", "Not authorized");
+    return res.sendStatus(403);
+  }
+
+  commentUser.comments.splice(commentUser.comments.indexOf(id), 1);
+  video.comments.splice(video.comments.indexOf(id), 1);
+  await video.save();
+  await commentUser.save();
+  await Comment.findByIdAndDelete(id);
 
   return res.sendStatus(201);
 };
