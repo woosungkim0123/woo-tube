@@ -24,7 +24,7 @@ videoRouter
   .route("/upload")
   .all(protectorMiddleware)
   .get(getUpload)
-  .post(videoUpload.fields([{ name: "video" }, { name: "thumb" }]), postUpload);
+  .post(videoUpload, postUpload);
 videoRouter
   .route("/:id([0-9a-f]{24})/edit")
   .all(protectorMiddleware)
