@@ -75,6 +75,8 @@ export const postUpload = async (req, res) => {
   const { user: _id } = req.session;
   const { video, thumb } = req.files;
   const { title, description, hashtags } = req.body;
+  console.log("a");
+  console.log(thumb);
   try {
     const newVideo = await Video.create({
       title,
@@ -89,6 +91,7 @@ export const postUpload = async (req, res) => {
     user.save();
     return res.redirect("/");
   } catch (error) {
+    console.log(error);
     return res.status(400).render("upload", {
       pageTitle: `Upload Video`,
       errorMessage: error._message,
@@ -110,6 +113,7 @@ export const deleteVideo = async (req, res) => {
   await Video.findByIdAndDelete(id);
   user.videos.splice(user.videos.indexOf(id), 1);
   user.save();
+
   return res.redirect("/");
 };
 
