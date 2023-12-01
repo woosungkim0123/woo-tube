@@ -2,10 +2,6 @@
   "name": "wootube",
   "version": "1.0.0",
   "description": "The best way to watch video",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/woosungkim0123/nodejsProject.git"
-  },
   "scripts": {
     "start": "node build/init.js",
     "build": "npm run build:server && npm run build:assets",
@@ -15,11 +11,6 @@
     "dev:assets": "webpack --mode=development -w"
   },
   "author": "woosung",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/woosungkim0123/nodejsProject/issues"
-  },
-  "homepage": "https://github.com/woosungkim0123/nodejsProject#readme",
   "dependencies": {
     "@ffmpeg/core": "^0.10.0",
     "@ffmpeg/ffmpeg": "^0.10.1",

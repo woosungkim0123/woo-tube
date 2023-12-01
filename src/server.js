@@ -12,24 +12,13 @@ import videoRouter from "./routers/videoRouter";
 import { localsMiddleware } from "./middlewares";
 import apiRouter from "./routers/apiRouter";
 
-/*
-const curr = new Date();
-
-// 2. UTC 시간 계산
-const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
-
-// 3. UTC to KST (UTC + 9시간)
-const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
-const kr_curr = new Date(utc + KR_TIME_DIFF);
-
-console.log("한국시간 : " + kr_curr);
-*/
 const app = express();
 const logger = morgan("common");
 
 app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
 app.use(logger);
+
 // express는 form을 어떻게 다루는지 모름
 // form을 처리하고 싶다고 말해야함
 // form의 body를 이해함
@@ -73,30 +62,3 @@ app.use("/videos", videoRouter);
 app.use("/api", apiRouter);
 
 export default app;
-
-/*
-const {
-  session: {
-    user: {id},
-  },
-  body{name}
-}
-
-
-세션 업데이트 시켜줄려면?
-db도 업데이트하고 이것도 업데이트
-
-직접하는것 req.session.user ={
-  ...req.session.user,
-  //업데이트해줌밑에꺼
-  name,
-  email,
-
-}
-
-
-
-*/
-// 서버에 이미지를 저장하는 방식은 좋지않다
-// 다른 곳에 저장
-// 서버가 사라졌다 다시 돌아와도 파일은 그대로 있도록

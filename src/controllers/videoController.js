@@ -22,8 +22,6 @@ export const search = async (req, res) => {
   if (keyword) {
     videos = await Video.find({
       title: {
-        // i는 대소문자 구분없음
-
         $regex: new RegExp(keyword, "i"),
       },
     });
@@ -75,8 +73,7 @@ export const postUpload = async (req, res) => {
   const { user: _id } = req.session;
   const { video, thumb } = req.files;
   const { title, description, hashtags } = req.body;
-  console.log("a");
-  console.log(thumb);
+
   try {
     const newVideo = await Video.create({
       title,
