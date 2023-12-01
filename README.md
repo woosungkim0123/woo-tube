@@ -23,7 +23,7 @@ This project is a video-sharing web application that supports functionalities si
 
 ### System Requirements
 
-Before installing and running the project, make sure the following software is installed on your system.
+Before installing and running the project, make sure the following software is installed on your system:
 
 ```
 node 16.17.1
