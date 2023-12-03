@@ -43,7 +43,7 @@ npm install
    
     ```sh
     DB_URL= # set MongoDB Atlas URL Here
-    COOKIE_SECRET=test
+    COOKIE_SECRET= # set Secret Key whatever you want
     GH_CLIENT= # github Login Clinet Id
     GH_SECRET= # github Login Secret
     ```
